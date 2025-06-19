@@ -1,0 +1,6 @@
+Hello
+today i am solving assignments related to file handling
+
+w helps to open in write mode , it creates file whether it is present or not
+
+there

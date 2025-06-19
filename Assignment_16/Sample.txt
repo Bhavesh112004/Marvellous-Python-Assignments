@@ -1,0 +1,6 @@
+Hello
+today i am solving assignments related to file handling
+r helps to open file in read mode
+w helps to open in write mode , it creates file whether it is present or not
+x helps to create file if not present and gives error if already
+there
