@@ -1,0 +1,66 @@
+import pandas as pd
+import numpy as np
+
+from sklearn.preprocessing import StandardScaler
+
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+
+from sklearn.metrics import confusion_matrix, classification_report
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+def CancerDetection(Datapath):
+    line = "-"*150
+    df = pd.read_csv(Datapath)
+
+    return df
+
+def DataModify(df):
+
+    df.drop(columns = "CodeNumber", inplace = True)
+    #print(df.head())
+
+    df.replace("?", np.nan, inplace = True)
+    print(df.isnull().sum())
+
+    df = df.apply(pd.to_numeric, errors='ignore')
+
+    for col in df.select_dtypes(include = [np.number]).columns:
+        df[col].fillna(df[col].median(), inplace = True)
+
+    print(df.isnull().sum())
+    
+    return df
+
+def Model(df):
+    x = df.drop(columns = 'CancerType')
+    y = df['CancerType']
+
+    scaler = StandardScaler()
+
+    df = scaler.fit_transform(x)
+    df = pd.DataFrame(x)
+
+    x_train,x_test,y_train,y_test = train_test_split(x, y, test_size = 0.2, random_state = 42)
+
+    model = RandomForestClassifier(n_estimators = 100, random_state = 42)
+    model.fit(x_train,y_train)
+
+    y_predict = model.predict(x_test)
+
+    accuracy = accuracy_score(y_test, y_predict)
+
+    print(accuracy*100)
+    
+    cm = confusion_matrix(y_test, y_predict)
+    print(cm)
+        
+def main():
+   Dataframe =  CancerDetection("breast-cancer-wisconsin.csv")
+   Data = DataModify(Dataframe)
+   Model(Data) 
+
+if __name__ == "__main__":
+    main()
